@@ -1,0 +1,10 @@
+# IDE leftovers
+.vscode/
+
+# Project related local copies
+node_modules/
+
+# Private files and folders
+.npmrc
+.nvmrc
+.env
