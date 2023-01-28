@@ -4,18 +4,26 @@ run-name: ${{ github.actor }} is testing out GitHub Actions
 on:
   - push
 jobs:
-  Explore-GitHub-Actions:
+  tag:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
+      - name: Check out code
         uses: actions/checkout@v3
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+        with:
+          fetch-depth: 0
+      - name: Setup sv4git
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          curl -s https://api.github.com/repos/bvieira/sv4git/releases/latest | jq -r '.assets[] | select(.browser_download_url | contains("linux")) | .browser_download_url' | wget -O /tmp/sv4git.tar.gz -qi - \
+            && tar -C /usr/local/bin -xzf /tmp/sv4git.tar.gz
+      - name: Create tag
+        id: create-tag
+        run: | 
+          git sv nv
+          VERSION=$(git sv cv)
+          echo "::set-output name=tag::v$VERSION"
+      - name: Create release notes
+        run: |
+          git sv rn -t "${{ needs.tag.outputs.tag }}"
+    outputs:
+      tag: ${{ steps.create-tag.outputs.tag }}
 ...
