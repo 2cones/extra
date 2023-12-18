@@ -4,7 +4,7 @@
   "description": "Base Level Extension",
   "version": "0.0.1",
   "action": {
-    "default_popup": "popup.html",
-    "default_icon": "icon.png"
+    "default_popup": "components/popup/popup.html",
+    "default_icon": "resources/images/icon-24.png"
   }
 }

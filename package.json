@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/2cones/extra/issues"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "chrome-types": "^0.1.246"
+  }
 }
